@@ -30,4 +30,28 @@
         android:id="@+id/login"
         android:layout_centerVertical="true"
         />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Iniciar Sin Login"
+        android:id="@+id/iniciarSinLogin"
+        android:layout_below="@+id/login" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chequear Conexion"
+        android:id="@+id/chequearConexion"
+        android:layout_below="@+id/iniciarSinLogin" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/conexionTxt"
+        android:layout_below="@+id/chequearConexion"
+        android:layout_centerHorizontal="true" />
+
+
 </RelativeLayout>
