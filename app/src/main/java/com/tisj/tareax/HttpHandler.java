@@ -1,5 +1,7 @@
 package com.tisj.tareax;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.util.Log;
 
@@ -43,13 +45,6 @@ public class HttpHandler {
             URL url = new URL(reqUrl);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod(method);
-//            if (method == "POST") {
-//
-//            }            for(Map.Entry<String, String> param : parametros){
-//
-//            }
-//            conn.
-
 
             // read the response
             InputStream in = new BufferedInputStream(conn.getInputStream());
@@ -92,11 +87,7 @@ public class HttpHandler {
 
 
             return conn.getResponseCode() == 200;
-            // read the response
-//            InputStream in = new BufferedInputStream(conn.getInputStream());
-//
-//
-//            response = convertStreamToString(in);
+
         } catch (MalformedURLException e) {
             Log.e(TAG, "MalformedURLException: " + e.getMessage());
         } catch (ProtocolException e) {
@@ -131,5 +122,21 @@ public class HttpHandler {
         return sb.toString();
     }
 
+    public Bitmap getImagen(String url) {
+        Bitmap bm = null;
+        try {
+            URL _url = new URL(url);
+            URLConnection conn = _url.openConnection();
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is);
+            bm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();
+        } catch (IOException e) {
+
+        }
+        return bm;
+    }
 
 }

@@ -2,6 +2,7 @@ package com.tisj.tareax;
 
 
 import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.Toast;
+
+import com.tisj.tareax.adapters.EstudianteAdapter;
+import com.tisj.tareax.modelo.Estudiante;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +30,8 @@ public class ListarEstudiantesActivity extends AppCompatActivity {
     private ListView lv;
     // URL to get contacts JSON
     private static String url = "http://diegonicolas.webcindario.com/ListarEstudiantes.php";
-    ArrayList<HashMap<String, String>> listaEstudiantes;
+    //ArrayList<HashMap<String, String>> listaEstudiantes;
+    ArrayList<Estudiante> listaEstudiantes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,14 +79,17 @@ public class ListarEstudiantesActivity extends AppCompatActivity {
                         String nombre = c.getString("nombre");
                         String cedula = c.getString("cedula");
                         String mail = c.getString("mail");
+                        String imagenUrl = c.getString("foto");
 
                         // tmp hash map for single contact
-                        HashMap<String, String> estudiante = new HashMap<>();
+                        Estudiante estudiante = new Estudiante();
 
                         // adding each child node to HashMap key => value
-                        estudiante.put("nombre", nombre);
-                        estudiante.put("cedula", cedula);
-                        estudiante.put("mail", mail);
+                        estudiante.setNombre(nombre);
+                        estudiante.setCedula(cedula);
+                        estudiante.setMail(mail);
+                        estudiante.setImagenUrl(imagenUrl);
+                        estudiante.setImagen(sh.getImagen(imagenUrl));
 
                         // adding contact to contact list
                         listaEstudiantes.add(estudiante);
@@ -97,7 +105,6 @@ public class ListarEstudiantesActivity extends AppCompatActivity {
                                     .show();
                         }
                     });
-
                 }
             } else {
                 Log.e(TAG, "No se pudieron obtener los alumnos.");
@@ -110,7 +117,6 @@ public class ListarEstudiantesActivity extends AppCompatActivity {
                                 .show();
                     }
                 });
-
             }
 
             return null;
@@ -125,12 +131,9 @@ public class ListarEstudiantesActivity extends AppCompatActivity {
             /**
              * Updating parsed JSON data into ListView
              * */
-            ListAdapter adapter = new SimpleAdapter(
-                    ListarEstudiantesActivity.this, listaEstudiantes,
-                    R.layout.list_estudiante,
-                    new String[]{"nombre", "cedula", "mail"},
-                    new int[]{R.id.estudianteNombre,
-                    R.id.estudianteCedula, R.id.estudianteMail});
+
+            //Activity activity, int textViewResourceId, ArrayList<Estudiante> _estudiantes)
+            ListAdapter adapter = new EstudianteAdapter(ListarEstudiantesActivity.this, 0, listaEstudiantes);
 
             lv.setAdapter(adapter);
         }
