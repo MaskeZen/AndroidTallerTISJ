@@ -11,18 +11,6 @@
     tools:context="com.tisj.tareax.ListarEstudiantesActivity">
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Listado de estudiantes"
-        android:id="@+id/listadoDeEstudiantesTxt"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
 
-
-    <ListView
-        android:id="@+id/listaEstudiantes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"></ListView>
 
 </RelativeLayout>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_estudiantes"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="Estudiantes" />
+        <item
+            android:id="@+id/menu_clases"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Clases" />
+        <item
+            android:id="@+id/menu_practicos"
+            android:icon="@drawable/ic_menu_slideshow"
+            android:title="Prácticos" />
+        <item
+            android:id="@+id/menu_teoricos"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Teóricos" />
+    </group>
+
+    <item android:title="Opciones">
+        <menu>
+            <item
+                android:id="@+id/menu_perfil"
+                android:icon="@drawable/ic_menu_share"
+                android:title="Mi Perfil" />
+            <item
+                android:id="@+id/menu_logout"
+                android:icon="@drawable/ic_menu_send"
+                android:title="Cerrar Sesión" />
+        </menu>
+    </item>
+
+</menu>
