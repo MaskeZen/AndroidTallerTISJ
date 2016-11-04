@@ -2,6 +2,7 @@ package com.tisj.tareax;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,8 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tisj.tareax.adapters.TeoricoAdapter;
@@ -36,7 +39,7 @@ import java.util.ArrayList;
 public class ListarTeoricosFragment extends Fragment {
 
 
-    private String TAG = ListarEstudiantesFragment.class.getSimpleName();
+    private String TAG = ListarTeoricosFragment.class.getSimpleName();
 
     private ProgressDialog pDialog;
     private ListView lv;
@@ -45,12 +48,13 @@ public class ListarTeoricosFragment extends Fragment {
     private ArrayList<Teorico> listaTeoricos;
     private OnFragmentInteractionListener mListener;
 
+    public ListarTeoricosFragment() {
+        // Required empty public constructor
+    }
+
     public static ListarTeoricosFragment newInstance( ) {
         ListarTeoricosFragment fragment = new ListarTeoricosFragment();
         return fragment;
-    }
-    public ListarTeoricosFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -61,6 +65,7 @@ public class ListarTeoricosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View vista = inflater.inflate(R.layout.fragment_listar_teoricos, container, false);
 
         listaTeoricos = new ArrayList<>();
@@ -75,6 +80,8 @@ public class ListarTeoricosFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+
+
     }
 
     @Override
@@ -189,14 +196,35 @@ public class ListarTeoricosFragment extends Fragment {
             // Dismiss the progress dialog
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            /**
-             * Updating parsed JSON data into ListView
-             * */
 
-            //Activity activity, int textViewResourceId, ArrayList<Estudiante> _estudiantes)
             ListAdapter adapter = new TeoricoAdapter(ListarTeoricosFragment.this.getActivity(), 0, listaTeoricos);
 
             lv.setAdapter(adapter);
+
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                    TextView tvPdf = (TextView)v.findViewById(R.id.teoricoPdf);
+                    String url = tvPdf.getText().toString();
+
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+                //        String url = "http://www.example.com";
+//        Intent i = new Intent(Intent.ACTION_VIEW);
+//        i.setData(Uri.parse(url));
+//        startActivity(i);
+                public void onClick(View v) {
+                    TextView teoricoPDF = (TextView) ((View) v.getParent()).findViewById(R.id.teoricoPdf);
+                String url = teoricoPDF.getText().toString();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+                }
+            });
+
         }
 
     }
