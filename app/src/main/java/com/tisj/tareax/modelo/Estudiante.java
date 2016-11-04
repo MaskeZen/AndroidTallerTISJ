@@ -12,6 +12,7 @@ public class Estudiante {
     public String mail;
     public String imagenUrl;
     public Bitmap imagen;
+    public String faltas;
 
     public String getNombre() {
         return nombre;
@@ -51,5 +52,13 @@ public class Estudiante {
 
     public void setImagen(Bitmap imagen) {
         this.imagen = imagen;
+    }
+
+    public String getFaltas() {
+        return faltas;
+    }
+
+    public void setFaltas(String faltas) {
+        this.faltas = faltas;
     }
 }

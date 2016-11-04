@@ -1,0 +1,46 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tisj.tareax.DetalleEstudianteFragment">
+
+    <ImageView
+        android:layout_width="147dp"
+        android:layout_height="147dp"
+        android:id="@+id/estudianteDetalleImagen"
+        android:layout_gravity="center_horizontal|top"/>
+
+    <TextView
+        android:id="@+id/estudianteDetalleNombre"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:layout_marginTop="147dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/estudianteDetalleCedula"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:textColor="#5d5d5d"
+        android:textStyle="bold"
+        android:layout_marginTop="213dp"/>
+
+    <TextView
+        android:id="@+id/estudianteDetalleMail"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:textColor="#5d5d5d"
+        android:textStyle="bold"
+        android:layout_marginTop="279dp"/>
+
+    <TextView
+        android:id="@+id/estudianteDetalleFaltas"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:textColor="#5d5d5d"
+        android:textStyle="bold"
+        android:layout_gravity="right|top"
+        android:layout_marginTop="345dp"/>
+</FrameLayout>
