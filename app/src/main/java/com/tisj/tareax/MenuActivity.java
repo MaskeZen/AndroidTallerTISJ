@@ -45,20 +45,17 @@ public class MenuActivity extends AppCompatActivity
         if (savedInstanceState == null) {
             Fragment fragment = null;
             fragment =  new BienvenidaFragment();
+
+            Bundle args = new Bundle();
+            Bundle extras = getIntent().getExtras();
+            String paramCedula = extras.getString("cedula");
+            args.putString("cedula",paramCedula);
+            fragment.setArguments(args);
             getFragmentManager().beginTransaction().add(R.id.frame, fragment).commit();
         }
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

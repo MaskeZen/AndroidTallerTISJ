@@ -4,11 +4,35 @@
     android:layout_height="match_parent"
     tools:context="com.tisj.tareax.BienvenidaFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <ImageView
+        android:layout_width="147dp"
+        android:layout_height="147dp"
+        android:id="@+id/bienvenidaImagen"
+        android:layout_gravity="center_horizontal|top"/>
+
     <TextView
+        android:id="@+id/bienvenidaNombre"
         android:layout_width="match_parent"
-        android:layout_height="467dp"
-        android:text="@string/hello_blank_fragment"
-        android:layout_gravity="center" />
+        android:layout_height="66dp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="16sp"
+        android:layout_marginTop="147dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/bienvenidaCedula"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:textColor="#5d5d5d"
+        android:textStyle="bold"
+        android:layout_marginTop="213dp"/>
+
+    <TextView
+        android:id="@+id/bienvenidaMail"
+        android:layout_width="match_parent"
+        android:layout_height="66dp"
+        android:textColor="#5d5d5d"
+        android:textStyle="bold"
+        android:layout_marginTop="279dp"/>
 
 </FrameLayout>
