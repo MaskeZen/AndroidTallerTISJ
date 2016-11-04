@@ -80,8 +80,6 @@ public class ListarTeoricosFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
-
-
     }
 
     @Override
@@ -101,16 +99,6 @@ public class ListarTeoricosFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
@@ -193,7 +181,7 @@ public class ListarTeoricosFragment extends Fragment {
         @Override
         protected void onPostExecute(Void result) {
             super.onPostExecute(result);
-            // Dismiss the progress dialog
+            // Cierra el dialog
             if (pDialog.isShowing())
                 pDialog.dismiss();
 
@@ -211,17 +199,6 @@ public class ListarTeoricosFragment extends Fragment {
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     startActivity(i);
-                }
-                //        String url = "http://www.example.com";
-//        Intent i = new Intent(Intent.ACTION_VIEW);
-//        i.setData(Uri.parse(url));
-//        startActivity(i);
-                public void onClick(View v) {
-                    TextView teoricoPDF = (TextView) ((View) v.getParent()).findViewById(R.id.teoricoPdf);
-                String url = teoricoPDF.getText().toString();
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
                 }
             });
 
