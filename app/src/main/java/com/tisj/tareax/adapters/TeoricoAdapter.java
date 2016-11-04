@@ -71,7 +71,7 @@ public class TeoricoAdapter extends ArrayAdapter<Teorico> {
             }
 
             holder.teoricoId.setText(teoricos.get(position).getId());
-            holder.teoricoId.setText("Numero: " + teoricos.get(position).getNumero());
+            holder.teoricoNumero.setText("Numero: " + teoricos.get(position).getNumero());
             holder.teoricoPdf.setText(teoricos.get(position).getPdf());
         }
         catch (Exception e) {

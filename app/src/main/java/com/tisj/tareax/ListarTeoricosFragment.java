@@ -36,7 +36,7 @@ import java.util.ArrayList;
 public class ListarTeoricosFragment extends Fragment {
 
 
-    private String TAG = ListarEstudiantesFragment.class.getSimpleName();
+    private String TAG = ListarTeoricosFragment.class.getSimpleName();
 
     private ProgressDialog pDialog;
     private ListView lv;
@@ -45,12 +45,13 @@ public class ListarTeoricosFragment extends Fragment {
     private ArrayList<Teorico> listaTeoricos;
     private OnFragmentInteractionListener mListener;
 
+    public ListarTeoricosFragment() {
+        // Required empty public constructor
+    }
+
     public static ListarTeoricosFragment newInstance( ) {
         ListarTeoricosFragment fragment = new ListarTeoricosFragment();
         return fragment;
-    }
-    public ListarTeoricosFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -61,6 +62,7 @@ public class ListarTeoricosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         View vista = inflater.inflate(R.layout.fragment_listar_teoricos, container, false);
 
         listaTeoricos = new ArrayList<>();
@@ -189,11 +191,7 @@ public class ListarTeoricosFragment extends Fragment {
             // Dismiss the progress dialog
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            /**
-             * Updating parsed JSON data into ListView
-             * */
 
-            //Activity activity, int textViewResourceId, ArrayList<Estudiante> _estudiantes)
             ListAdapter adapter = new TeoricoAdapter(ListarTeoricosFragment.this.getActivity(), 0, listaTeoricos);
 
             lv.setAdapter(adapter);
