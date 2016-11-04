@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -200,29 +201,29 @@ public class ListarTeoricosFragment extends Fragment {
 
             lv.setAdapter(adapter);
 
-//            lv.setOnItemClickListener(new OnItemClickListener() {
-//
-//
-//                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-//                    String text = mStrings[position];
-//                    YourImageClass img = mImages[position];
-//                    Intent i = new Intent(MainActivity.this, ShowFullImageActivity.class);
-//                    i.putExtra("TEXT", text);
-//                    i.putExtra("IMAGE", img); // <-- Assumed you image is Parcelable
-//                    startActivity(i);
-//                }
-//                //        String url = "http://www.example.com";
-////        Intent i = new Intent(Intent.ACTION_VIEW);
-////        i.setData(Uri.parse(url));
-////        startActivity(i);
-//                public void onClick(View v) {
-//                    TextView teoricoPDF = (TextView) ((View) v.getParent()).findViewById(R.id.teoricoPdf);
-//                String url = teoricoPDF.getText().toString();
-//                Intent i = new Intent(Intent.ACTION_VIEW);
-//                i.setData(Uri.parse(url));
-//                startActivity(i);
-//                }
-//            });
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                    TextView tvPdf = (TextView)v.findViewById(R.id.teoricoPdf);
+                    String url = tvPdf.getText().toString();
+
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    startActivity(i);
+                }
+                //        String url = "http://www.example.com";
+//        Intent i = new Intent(Intent.ACTION_VIEW);
+//        i.setData(Uri.parse(url));
+//        startActivity(i);
+                public void onClick(View v) {
+                    TextView teoricoPDF = (TextView) ((View) v.getParent()).findViewById(R.id.teoricoPdf);
+                String url = teoricoPDF.getText().toString();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+                }
+            });
 
         }
 
