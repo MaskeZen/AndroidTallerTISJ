@@ -10,6 +10,7 @@
         android:layout_height="50dp"
         android:id="@+id/estudianteImagen" />
 
+
     <TextView
         android:id="@+id/estudianteNombre"
         android:layout_width="fill_parent"

@@ -71,12 +71,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new obtenerLogin().execute();
 
                 break;
-            case R.id.iniciarSinLogin:
-
-                intento = new Intent(this.getApplicationContext(), ListarEstudiantesActivity.class);
-                startActivity(intento);
-
-                break;
             case R.id.chequearConexion:
                 TextView conexionText = (TextView)findViewById(R.id.conexionTxt);
                 break;

@@ -1,12 +1,11 @@
 package com.tisj.tareax;
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +14,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.tisj.tareax.adapters.EstudianteAdapter;
+import com.tisj.tareax.adapters.PracticoAdapter;
 import com.tisj.tareax.modelo.Estudiante;
+import com.tisj.tareax.modelo.Practico;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,34 +28,30 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ListarEstudiantesFragment.OnFragmentInteractionListener} interface
+ * {@link ListarPracticosFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ListarEstudiantesFragment#newInstance} factory method to
+ * Use the {@link ListarPracticosFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListarEstudiantesFragment extends Fragment {
+public class ListarPracticosFragment extends Fragment {
 
     private String TAG = ListarEstudiantesFragment.class.getSimpleName();
 
     private ProgressDialog pDialog;
     private ListView lv;
-    // URL para obtener los datos
-    private static String url = "http://diegonicolas.webcindario.com/ListarEstudiantes.php";
-    private ArrayList<Estudiante> listaEstudiantes;
 
+    private static String url = "http://diegonicolas.webcindario.com/ListarPracticos.php";
+    private ArrayList<Practico> listaPracticos;
     private OnFragmentInteractionListener mListener;
 
-    public ListarEstudiantesFragment() {
+    public ListarPracticosFragment() {
         // Required empty public constructor
     }
 
 
-    public static ListarEstudiantesFragment newInstance(ArrayList<Estudiante> listaEstudiantes) {
+    public static ListarPracticosFragment newInstance() {
 
-        ListarEstudiantesFragment fragment = new ListarEstudiantesFragment();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-
+        ListarPracticosFragment fragment = new ListarPracticosFragment();
         return fragment;
     }
 
@@ -63,23 +59,18 @@ public class ListarEstudiantesFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        listaEstudiantes = new ArrayList<>();
-//        lv = (ListView)this.getActivity().findViewById(R.id.listaEstudiantes);
-//
-//        new GetEstudiantes().execute();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View vista = inflater.inflate(R.layout.fragment_listar_estudiantes, container, false);
+        View vista = inflater.inflate(R.layout.fragment_listar_practicos, container, false);
 
-        listaEstudiantes = new ArrayList<>();
-        lv = (ListView)vista.findViewById(R.id.listaEstudiantes);
-        new GetEstudiantes().execute();
+        listaPracticos = new ArrayList<>();
+        lv = (ListView)vista.findViewById(R.id.listaPracticos);
+        new GetPracticos().execute();
 
-        // Inflate the layout for this fragment
         return vista;
     }
 
@@ -122,14 +113,14 @@ public class ListarEstudiantesFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private class GetEstudiantes extends AsyncTask<Void, Void, Void> {
+    private class GetPracticos extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             // Showing progress dialog
-            pDialog = new ProgressDialog(ListarEstudiantesFragment.this.getActivity());
-            pDialog.setMessage("Cargando los estudiantes...");
+            pDialog = new ProgressDialog(ListarPracticosFragment.this.getActivity());
+            pDialog.setMessage("Cargando los prácticos...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -141,43 +132,37 @@ public class ListarEstudiantesFragment extends Fragment {
             // Making a request to url and getting response
             String jsonStr = sh.makeServiceCall(url, "GET", null);
 
-            Log.e(TAG, "Response from url: " + jsonStr);
+            Log.e(TAG, "datos obtenidos: " + jsonStr);
 
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
 
                     // Getting JSON Array node
-                    JSONArray contacts = jsonObj.getJSONArray("Estudiantes");
+                    JSONArray contacts = jsonObj.getJSONArray("Practicos");
 
                     // looping through All Contacts
                     for (int i = 0; i < contacts.length(); i++) {
                         JSONObject c = contacts.getJSONObject(i);
 
-                        String nombre = c.getString("nombre");
-                        String cedula = c.getString("cedula");
-                        String mail = c.getString("mail");
-                        String imagenUrl = c.getString("foto");
+                        String id = c.getString("id");
+                        String numero = c.getString("numero");
 
                         // tmp hash map for single contact
-                        Estudiante estudiante = new Estudiante();
+                        Practico practico= new Practico();
 
                         // adding each child node to HashMap key => value
-                        estudiante.setNombre(nombre);
-                        estudiante.setCedula(cedula);
-                        estudiante.setMail(mail);
-                        estudiante.setImagenUrl(imagenUrl);
-                        estudiante.setImagen(sh.getImagen(imagenUrl));
+                        practico.setId(id);
+                        practico.setNumero(numero);
 
                         // adding contact to contact list
-                        listaEstudiantes.add(estudiante);
+                        listaPracticos.add(practico);
                     }
                 } catch (final JSONException e) {
-                    Log.e(TAG, "Json error: " + e.getMessage());
-                    ListarEstudiantesFragment.this.getActivity().runOnUiThread(new Runnable() {
+                    ListarPracticosFragment.this.getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(ListarEstudiantesFragment.this.getActivity().getApplicationContext(),
+                            Toast.makeText(ListarPracticosFragment.this.getActivity().getApplicationContext(),
                                     "Json error: " + e.getMessage(),
                                     Toast.LENGTH_LONG)
                                     .show();
@@ -185,11 +170,11 @@ public class ListarEstudiantesFragment extends Fragment {
                     });
                 }
             } else {
-                Log.e(TAG, "No se pudieron obtener los alumnos.");
-                ListarEstudiantesFragment.this.getActivity().runOnUiThread(new Runnable() {
+                Log.e(TAG, "No se pudieron obtener los practicos.");
+                ListarPracticosFragment.this.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(ListarEstudiantesFragment.this.getActivity().getApplicationContext(),
+                        Toast.makeText(ListarPracticosFragment.this.getActivity().getApplicationContext(),
                                 "No se pudieron obtener los alumnos del servidor!",
                                 Toast.LENGTH_LONG)
                                 .show();
@@ -211,11 +196,15 @@ public class ListarEstudiantesFragment extends Fragment {
              * */
 
             //Activity activity, int textViewResourceId, ArrayList<Estudiante> _estudiantes)
-            ListAdapter adapter = new EstudianteAdapter(ListarEstudiantesFragment.this.getActivity(), 0, listaEstudiantes);
+            ListAdapter adapter = new PracticoAdapter(ListarPracticosFragment.this.getActivity(), 0, listaPracticos);
 
             lv.setAdapter(adapter);
         }
 
     }
+
+
+
+
 
 }

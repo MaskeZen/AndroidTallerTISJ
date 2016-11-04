@@ -121,11 +121,12 @@ public class MenuActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        Fragment fragment = null;
 
         if (id == R.id.menu_practicos) {
-            // Handle the camera action
+            fragment =  new ListarPracticosFragment();
+            getFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
         } else if (id == R.id.menu_estudiantes) {
-            Fragment fragment = null;
             fragment =  new ListarEstudiantesFragment();
             getFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
         } else if (id == R.id.menu_teoricos) {
