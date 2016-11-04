@@ -1,0 +1,24 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.tisj.tareax.ListarAsistenciasFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Listado de Asistentes"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textAlignment="center"
+        />
+
+    <ListView
+        android:id="@+id/listaAsistencias"
+        android:layout_width="wrap_content"
+        android:layout_height="530dp"
+        android:layout_gravity="center_horizontal|bottom"></ListView>
+        />
+
+</FrameLayout>

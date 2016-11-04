@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tisj.tareax.adapters.ClaseAdapter;
@@ -80,6 +82,21 @@ public class ListarClasesFragment extends Fragment {
         lv = (ListView)vista.findViewById(R.id.listaClases);
         new GetClases().execute();
 
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                      @Override
+                                      public void onItemClick(AdapterView<?> parent, View view, int position, long id){
+
+                                          Fragment fragment = null;
+                                          fragment =  new ListarAsistenciasFragment();
+                                          TextView cedula = (TextView) view.findViewById(R.id.claseId);
+                                          Bundle args = new Bundle();
+                                          String paramIdClase = cedula.getText().toString().substring(4);
+                                          args.putString("idClase",paramIdClase);
+                                          fragment.setArguments(args);
+                                          getFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
+                                      }
+                                  }
+        );
         // Inflate the layout for this fragment
         return vista;
     }

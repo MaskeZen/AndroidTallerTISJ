@@ -1,46 +1,49 @@
 package com.tisj.tareax;
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import com.tisj.tareax.adapters.EstudianteAdapter;
 import com.tisj.tareax.modelo.Estudiante;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link BienvenidaFragment.OnFragmentInteractionListener} interface
+ * {@link ListarAsistenciasFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link BienvenidaFragment#newInstance} factory method to
+ * Use the {@link ListarAsistenciasFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BienvenidaFragment extends Fragment {
-    private String TAG = DetalleEstudianteFragment.class.getSimpleName();
+public class ListarAsistenciasFragment extends Fragment {
 
+    private String TAG = ListarAsistenciasFragment.class.getSimpleName();
     private ProgressDialog pDialog;
+    private ListView lv;
     // URL para obtener los datos
-    private static String urlDetalle = "http://diegonicolas.webcindario.com/DetalleEstudiante.php?IdEstudiante=";
-
-    private Estudiante estudiante;
+    private static String url = "http://diegonicolas.webcindario.com/ListarAsistencias.php?IdClase=";
+    private ArrayList<Estudiante> listaEstudiantes;
 
     private OnFragmentInteractionListener mListener;
 
-    public BienvenidaFragment() {
+    public ListarAsistenciasFragment() {
         // Required empty public constructor
     }
 
@@ -50,13 +53,14 @@ public class BienvenidaFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment BienvenidaFragment.
+     * @return A new instance of fragment ListarAsistenciasFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static BienvenidaFragment newInstance(String param1, String param2) {
-        BienvenidaFragment fragment = new BienvenidaFragment();
+    public static ListarAsistenciasFragment newInstance(String param1, String param2) {
+        ListarAsistenciasFragment fragment = new ListarAsistenciasFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -72,15 +76,13 @@ public class BienvenidaFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View vista = inflater.inflate(R.layout.fragment_bienvenida, container, false);
+        View vista = inflater.inflate(R.layout.fragment_listar_asistencias, container, false);
 
-        estudiante = new Estudiante();
-        new GetDetalleEstudiante().execute();
-        // Inflate the layout for this fragment
-        if (pDialog.isShowing())
-            pDialog.dismiss();
+        listaEstudiantes = new ArrayList<>();
+        lv = (ListView)vista.findViewById(R.id.listaAsistencias);
+        new GetEstudiantes().execute();
+
         return vista;
-        // Inflate the layout for this fragment
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -122,14 +124,14 @@ public class BienvenidaFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private class GetDetalleEstudiante extends AsyncTask<Void, Void, Void> {
+    private class GetEstudiantes extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             // Showing progress dialog
-            pDialog = new ProgressDialog(BienvenidaFragment.this.getActivity());
-            pDialog.setMessage("Cargando el detalle del usuario...");
+            pDialog = new ProgressDialog(ListarAsistenciasFragment.this.getActivity());
+            pDialog.setMessage("Cargando los estudiantes...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -139,8 +141,7 @@ public class BienvenidaFragment extends Fragment {
             HttpHandler sh = new HttpHandler();
 
             // Making a request to url and getting response
-            String paramCedula =  getArguments().getString("cedula");
-            String jsonStr = sh.makeServiceCall(urlDetalle+paramCedula, "GET", null);
+            String jsonStr = sh.makeServiceCall(url+ getArguments().getString("idClase"), "GET", null);
 
             Log.e(TAG, "Response from url: " + jsonStr);
 
@@ -149,16 +150,19 @@ public class BienvenidaFragment extends Fragment {
                     JSONObject jsonObj = new JSONObject(jsonStr);
 
                     // Getting JSON Array node
-                    JSONArray contacts = jsonObj.getJSONArray("Estudiante");
+                    JSONArray contacts = jsonObj.getJSONArray("Asistencias");
 
                     // looping through All Contacts
                     for (int i = 0; i < contacts.length(); i++) {
                         JSONObject c = contacts.getJSONObject(i);
 
                         String nombre = c.getString("nombre");
-                        String cedula = c.getString("cedula");
+                        String cedula = c.getString("ciestudiante");
                         String mail = c.getString("mail");
                         String imagenUrl = c.getString("foto");
+
+                        // tmp hash map for single contact
+                        Estudiante estudiante = new Estudiante();
 
                         // adding each child node to HashMap key => value
                         estudiante.setNombre(nombre);
@@ -166,13 +170,16 @@ public class BienvenidaFragment extends Fragment {
                         estudiante.setMail(mail);
                         estudiante.setImagenUrl(imagenUrl);
                         estudiante.setImagen(sh.getImagen(imagenUrl));
+
+                        // adding contact to contact list
+                        listaEstudiantes.add(estudiante);
                     }
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json error: " + e.getMessage());
-                    BienvenidaFragment.this.getActivity().runOnUiThread(new Runnable() {
+                    ListarAsistenciasFragment.this.getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(BienvenidaFragment.this.getActivity().getApplicationContext(),
+                            Toast.makeText(ListarAsistenciasFragment.this.getActivity().getApplicationContext(),
                                     "Json error: " + e.getMessage(),
                                     Toast.LENGTH_LONG)
                                     .show();
@@ -180,12 +187,12 @@ public class BienvenidaFragment extends Fragment {
                     });
                 }
             } else {
-                Log.e(TAG, "No se pudo obtener el detalle del estudiante.");
-                BienvenidaFragment.this.getActivity().runOnUiThread(new Runnable() {
+                Log.e(TAG, "No se pudieron obtener los alumnos.");
+                ListarAsistenciasFragment.this.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(BienvenidaFragment.this.getActivity().getApplicationContext(),
-                                "No se pudo obtener el detalle del estudiante del servidor!",
+                        Toast.makeText(ListarAsistenciasFragment.this.getActivity().getApplicationContext(),
+                                "No se pudieron obtener los alumnos del servidor!",
                                 Toast.LENGTH_LONG)
                                 .show();
                     }
@@ -201,15 +208,14 @@ public class BienvenidaFragment extends Fragment {
             // Dismiss the progress dialog
             if (pDialog.isShowing())
                 pDialog.dismiss();
+            /**
+             * Updating parsed JSON data into ListView
+             * */
 
-            TextView nombre = (TextView) getView().findViewById(R.id.bienvenidaNombre);
-            nombre.setText(estudiante.nombre);
-            TextView cedula = (TextView) getView().findViewById(R.id.bienvenidaCedula);
-            cedula.setText("C.I.: "+estudiante.cedula);
-            TextView mail = (TextView) getView().findViewById(R.id.bienvenidaMail);
-            mail.setText("MAIL: "+estudiante.mail);
-            ImageView imagen = (ImageView) getView().findViewById(R.id.bienvenidaImagen);
-            imagen.setImageBitmap(estudiante.imagen);
+            //Activity activity, int textViewResourceId, ArrayList<Estudiante> _estudiantes)
+            ListAdapter adapter = new EstudianteAdapter(ListarAsistenciasFragment.this.getActivity(), 0, listaEstudiantes);
+
+            lv.setAdapter(adapter);
         }
 
     }
