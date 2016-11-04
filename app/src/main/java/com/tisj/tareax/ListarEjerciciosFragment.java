@@ -2,7 +2,6 @@ package com.tisj.tareax;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,15 +10,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tisj.tareax.adapters.PracticoAdapter;
-import com.tisj.tareax.modelo.Estudiante;
-import com.tisj.tareax.modelo.Practico;
+import com.tisj.tareax.adapters.EjercicioAdapter;
+import com.tisj.tareax.modelo.Comentario;
+import com.tisj.tareax.modelo.Ejercicio;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -31,49 +29,60 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ListarPracticosFragment.OnFragmentInteractionListener} interface
+ * {@link ListarEjerciciosFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ListarPracticosFragment#newInstance} factory method to
+ * Use the {@link ListarEjerciciosFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListarPracticosFragment extends Fragment {
+public class ListarEjerciciosFragment extends Fragment {
 
-    private String TAG = ListarEstudiantesFragment.class.getSimpleName();
+    private String TAG = ListarEjerciciosFragment.class.getSimpleName();
 
     private ProgressDialog pDialog;
     private ListView lv;
-
-    private static String url = "http://diegonicolas.webcindario.com/ListarPracticos.php";
-    private ArrayList<Practico> listaPracticos;
+    private static String url = "http://diegonicolas.webcindario.com/ListarEjercicios.php?IdPractico=";
+    private ArrayList<Ejercicio> listaEjercicios;
     private OnFragmentInteractionListener mListener;
 
-    public ListarPracticosFragment() {
+    private static String ARG_PRACTICO = "practico";
+    private String practicoId;
+
+    public ListarEjerciciosFragment() {
         // Required empty public constructor
     }
 
-    public static ListarPracticosFragment newInstance() {
-
-        ListarPracticosFragment fragment = new ListarPracticosFragment();
+    public static ListarEjerciciosFragment newInstance(String practicoIdParam) {
+        ListarEjerciciosFragment fragment = new ListarEjerciciosFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_PRACTICO, practicoIdParam);
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        if (getArguments() != null) {
+            practicoId = getArguments().getString(ARG_PRACTICO);
+        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View vista = inflater.inflate(R.layout.fragment_listar_practicos, container, false);
+        View vista = inflater.inflate(R.layout.fragment_listar_ejercicios, container, false);
 
-        listaPracticos = new ArrayList<>();
-        lv = (ListView)vista.findViewById(R.id.listaPracticos);
-        new GetPracticos().execute();
+        listaEjercicios = new ArrayList<>();
+        TextView titulo = (TextView)vista.findViewById(R.id.ejerciciosFragmentTitulo);
+        titulo.setText("Ejercicios del Practico " + practicoId);
+        lv = (ListView)vista.findViewById(R.id.listaEjercicios);
+        //new ObtenerEjercicios.execute();
+        new ObtenerEjercicios().execute();
 
+        // Inflate the layout for this fragment
         return vista;
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -115,14 +124,14 @@ public class ListarPracticosFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private class GetPracticos extends AsyncTask<Void, Void, Void> {
+    private class ObtenerEjercicios extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             // Showing progress dialog
-            pDialog = new ProgressDialog(ListarPracticosFragment.this.getActivity());
-            pDialog.setMessage("Cargando los prácticos...");
+            pDialog = new ProgressDialog(ListarEjerciciosFragment.this.getActivity());
+            pDialog.setMessage("Cargando los ejercicios...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
@@ -132,7 +141,7 @@ public class ListarPracticosFragment extends Fragment {
             HttpHandler sh = new HttpHandler();
 
             // Making a request to url and getting response
-            String jsonStr = sh.makeServiceCall(url, "GET", null);
+            String jsonStr = sh.makeServiceCall(url+practicoId, "GET", null);
 
             Log.e(TAG, "datos obtenidos: " + jsonStr);
 
@@ -141,30 +150,48 @@ public class ListarPracticosFragment extends Fragment {
                     JSONObject jsonObj = new JSONObject(jsonStr);
 
                     // Getting JSON Array node
-                    JSONArray contacts = jsonObj.getJSONArray("Practicos");
+                    JSONArray ejercicios = jsonObj.getJSONArray("Ejercicios");
 
                     // looping through All Contacts
-                    for (int i = 0; i < contacts.length(); i++) {
-                        JSONObject c = contacts.getJSONObject(i);
+                    for (int i = 0; i < ejercicios.length(); i++) {
+                        JSONObject c = ejercicios.getJSONObject(i);
 
-                        String id = c.getString("id");
+                        String idpractico = c.getString("idpractico");
                         String numero = c.getString("numero");
+                        String imagenUrl = c.getString("imagen");
 
                         // tmp hash map for single contact
-                        Practico practico= new Practico();
+                        Ejercicio ejercicio = new Ejercicio();
 
                         // adding each child node to HashMap key => value
-                        practico.setId(id);
-                        practico.setNumero(numero);
+                        ejercicio.setIdPractico(idpractico);
+                        ejercicio.setNumero(numero);
+                        ejercicio.setImagenUrl(imagenUrl);
+                        ejercicio.setImagen(sh.getImagen(imagenUrl));
+
+                        JSONArray comentarios = c.getJSONArray("comentarios");
+                        for(int comInd = 0; comInd < comentarios.length(); comInd++){
+                            JSONObject comentarioJS = comentarios.getJSONObject(comInd);
+
+                            Comentario comentario = new Comentario();
+
+                            comentario.setIdPractico(idpractico);
+                            comentario.setCiEstudiante(comentarioJS.getString("ciestudiante"));
+                            comentario.setIdEjercicio(comentarioJS.getString("idejercicio"));
+                            comentario.setFecha(comentarioJS.getString("fecha"));
+                            comentario.setFecha(comentarioJS.getString("fecha"));
+
+                            ejercicio.getComentarios().add(comentario);
+                        }
 
                         // adding contact to contact list
-                        listaPracticos.add(practico);
+                        listaEjercicios.add(ejercicio);
                     }
                 } catch (final JSONException e) {
-                    ListarPracticosFragment.this.getActivity().runOnUiThread(new Runnable() {
+                    ListarEjerciciosFragment.this.getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(ListarPracticosFragment.this.getActivity().getApplicationContext(),
+                            Toast.makeText(ListarEjerciciosFragment.this.getActivity().getApplicationContext(),
                                     "Json error: " + e.getMessage(),
                                     Toast.LENGTH_LONG)
                                     .show();
@@ -172,12 +199,12 @@ public class ListarPracticosFragment extends Fragment {
                     });
                 }
             } else {
-                Log.e(TAG, "No se pudieron obtener los practicos.");
-                ListarPracticosFragment.this.getActivity().runOnUiThread(new Runnable() {
+                Log.e(TAG, "No se pudieron obtener los ejercicios.");
+                ListarEjerciciosFragment.this.getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(ListarPracticosFragment.this.getActivity().getApplicationContext(),
-                                "No se pudieron obtener los alumnos del servidor!",
+                        Toast.makeText(ListarEjerciciosFragment.this.getActivity().getApplicationContext(),
+                                "No se pudieron obtener los ejercicios del servidor!",
                                 Toast.LENGTH_LONG)
                                 .show();
                     }
@@ -193,38 +220,12 @@ public class ListarPracticosFragment extends Fragment {
             // Dismiss the progress dialog
             if (pDialog.isShowing())
                 pDialog.dismiss();
-            /**
-             * Updating parsed JSON data into ListView
-             * */
 
-            //Activity activity, int textViewResourceId, ArrayList<Estudiante> _estudiantes)
-            ListAdapter adapter = new PracticoAdapter(ListarPracticosFragment.this.getActivity(), 0, listaPracticos);
+            ListAdapter adapter = new EjercicioAdapter(ListarEjerciciosFragment.this.getActivity(), 0, listaEjercicios);
 
             lv.setAdapter(adapter);
 
-            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-
-                    TextView tvPracticoId = (TextView)v.findViewById(R.id.practicoId);
-                    String practicoId = tvPracticoId.getText().toString();
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString("practico", practicoId);
-
-                        Fragment fragment =  new ListarEjerciciosFragment();
-                        fragment.setArguments(bundle);
-                        getFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
-
-                }
-            });
-
         }
-
     }
-
-
-
-
 
 }
