@@ -130,7 +130,8 @@ public class MenuActivity extends AppCompatActivity
             fragment =  new ListarEstudiantesFragment();
             getFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
         } else if (id == R.id.menu_teoricos) {
-
+            fragment =  new ListarTeoricosFragment();
+            getFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
         } else if (id == R.id.menu_clases) {
 
         } else if (id == R.id.menu_perfil) {
