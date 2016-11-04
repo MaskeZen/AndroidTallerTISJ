@@ -2,6 +2,7 @@ package com.tisj.tareax;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tisj.tareax.adapters.TeoricoAdapter;
@@ -77,6 +79,8 @@ public class ListarTeoricosFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+
+
     }
 
     @Override
@@ -195,6 +199,31 @@ public class ListarTeoricosFragment extends Fragment {
             ListAdapter adapter = new TeoricoAdapter(ListarTeoricosFragment.this.getActivity(), 0, listaTeoricos);
 
             lv.setAdapter(adapter);
+
+//            lv.setOnItemClickListener(new OnItemClickListener() {
+//
+//
+//                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+//                    String text = mStrings[position];
+//                    YourImageClass img = mImages[position];
+//                    Intent i = new Intent(MainActivity.this, ShowFullImageActivity.class);
+//                    i.putExtra("TEXT", text);
+//                    i.putExtra("IMAGE", img); // <-- Assumed you image is Parcelable
+//                    startActivity(i);
+//                }
+//                //        String url = "http://www.example.com";
+////        Intent i = new Intent(Intent.ACTION_VIEW);
+////        i.setData(Uri.parse(url));
+////        startActivity(i);
+//                public void onClick(View v) {
+//                    TextView teoricoPDF = (TextView) ((View) v.getParent()).findViewById(R.id.teoricoPdf);
+//                String url = teoricoPDF.getText().toString();
+//                Intent i = new Intent(Intent.ACTION_VIEW);
+//                i.setData(Uri.parse(url));
+//                startActivity(i);
+//                }
+//            });
+
         }
 
     }
