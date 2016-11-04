@@ -4,19 +4,23 @@
     android:layout_height="match_parent"
     tools:context="com.tisj.tareax.ListarEstudiantesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:text="Listado de estudiantes"
         android:id="@+id/listadoDeEstudiantesTxt"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:background="@android:color/holo_blue_dark"
+        android:textColor="@color/material_grey_100"
+        android:paddingLeft="20dp"
+
+        android:textSize="20dp"
+        android:shadowColor="@color/colorPrimary" />
 
     <ListView
         android:id="@+id/listaEstudiantes"
         android:layout_width="wrap_content"
         android:layout_height="530dp"
+        android:layout_marginTop="50dp"
         />
 
 </FrameLayout>
