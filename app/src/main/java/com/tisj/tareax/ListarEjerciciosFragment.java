@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -179,7 +180,7 @@ public class ListarEjerciciosFragment extends Fragment {
                             comentario.setCiEstudiante(comentarioJS.getString("ciestudiante"));
                             comentario.setIdEjercicio(comentarioJS.getString("idejercicio"));
                             comentario.setFecha(comentarioJS.getString("fecha"));
-                            comentario.setFecha(comentarioJS.getString("fecha"));
+                            comentario.setContenido(comentarioJS.getString("contenido"));
 
                             ejercicio.getComentarios().add(comentario);
                         }
@@ -224,6 +225,22 @@ public class ListarEjerciciosFragment extends Fragment {
             ListAdapter adapter = new EjercicioAdapter(ListarEjerciciosFragment.this.getActivity(), 0, listaEjercicios);
 
             lv.setAdapter(adapter);
+
+            lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+
+                    Ejercicio ejercicio = listaEjercicios.get(position);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("ejercicio", ejercicio);
+
+                    Fragment fragment =  new EjercicioFragment();
+                    fragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().replace(R.id.frame, fragment).commit();
+
+                }
+            });
 
         }
     }

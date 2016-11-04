@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AndroidTallerTISJ.iml" filepath="$PROJECT_DIR$/AndroidTallerTISJ.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TareaX.iml" filepath="$PROJECT_DIR$/TareaX.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

@@ -2,19 +2,20 @@ package com.tisj.tareax.modelo;
 
 import android.graphics.Bitmap;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by maske on 04/11/2016.
  */
-public class Ejercicio {
+public class Ejercicio implements Serializable {
 
     String idPractico;
     String numero;
     String imagenUrl;
     Bitmap imagen;
-    List<Comentario> comentarios;
+    ArrayList<Comentario> comentarios;
 
     public Ejercicio() {
         comentarios = new ArrayList<>();
@@ -52,7 +53,7 @@ public class Ejercicio {
         this.imagen = imagen;
     }
 
-    public List<Comentario> getComentarios() {
+    public ArrayList<Comentario> getComentarios() {
         return comentarios;
     }
 
